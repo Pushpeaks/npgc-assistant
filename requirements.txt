@@ -13,4 +13,6 @@ aiobreaker
 cachetools
 certifi
 httpx
+rapidfuzz
+beautifulsoup4
 
