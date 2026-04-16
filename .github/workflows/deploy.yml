@@ -19,6 +19,6 @@ jobs:
       - name: Push to hub
         uses: huggingface/hub-sync@main
         with:
-          repo_id: Pushpeaks7/npgc-assistant
+          huggingface_repo_id: Pushpeaks7/npgc-assistant
           repo_type: space
           hf_token: ${{ secrets.HF_TOKEN }}
