@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+redis
+python-dotenv
+pydantic
+gunicorn
+aiomysql
+cryptography
+google-generativeai
+numpy
+orjson
+aiobreaker
+cachetools
+certifi
+httpx
+

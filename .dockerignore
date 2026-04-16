@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Logs
+*.log
+
+# Project specific
+scratch/
+asset/
+.git/
+.gitignore
+Dockerfile
+.dockerignore
+chatbot_test_queries.txt
+README.md
