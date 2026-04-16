@@ -17,6 +17,9 @@ jobs:
           lfs: true
 
       - name: Push to hub
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push --force https://Pushpeaks7:$HF_TOKEN@huggingface.co/spaces/Pushpeaks7/npgc-assistant main
+        uses: huggingface/github-action@v2
+        with:
+          username: Pushpeaks7
+          space: npgc-assistant
+          token: ${{ secrets.HF_TOKEN }}
+          repo_type: space
