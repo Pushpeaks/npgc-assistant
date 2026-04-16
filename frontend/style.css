@@ -461,7 +461,7 @@ h1, h2, h3, .logo-text {
     max-width: fit-content;
     line-height: 1.4;
 }
-}
+
 
 .suggestion-btn:hover {
     background: var(--primary);
