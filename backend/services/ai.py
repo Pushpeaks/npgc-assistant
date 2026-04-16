@@ -2,6 +2,7 @@ import os
 import httpx
 import asyncio
 from dotenv import load_dotenv, find_dotenv
+from typing import List
 from services.cache import cached
 
 load_dotenv(find_dotenv())
