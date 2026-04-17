@@ -249,15 +249,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ]);
 
     function wordIsGibberish(word) {
-        const w = word.toLowerCase().replace(/[^a-z]/g, '');
-        if (w.length < 2) return false;
-        // Split word into consonant clusters (segments between vowels)
-        const clusters = w.split(/[aeiou]+/).filter(c => c.length >= 2);
-        for (const cluster of clusters) {
-            for (let i = 0; i < cluster.length - 1; i++) {
-                if (!VALID_BIGRAMS.has(cluster[i] + cluster[i + 1])) return true;
-            }
-        }
+        // Simplified: only block crazy repetitive or keyboard mash strings
+        const w = word.toLowerCase().trim();
+        if (/(.)\1{4,}/.test(w)) return true; // qqqqq
         return false;
     }
 
