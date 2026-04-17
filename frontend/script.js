@@ -278,10 +278,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Allow known NPGC/Hindi keywords to pass even if short
         const knownWords = new Set([
-            'admission', 'deadline', 'apply', 'faculty', 'professor', 'contact',
-            'bca','bba','bsc','mca','mba','ba','ma','hod','lab','npgc',
+            'admission', 'admissions', 'deadline', 'deadlines', 'apply', 'faculty', 'professor', 'contact',
+            'course', 'courses', 'fee', 'fees', 'scholarship', 'eligibility', 'npgc',
+            'bca','bba','bsc','mca','mba','ba','ma','hod','lab',
             'kab','kya','hai','se','ki','ka','ko','toh','kaise','kitni','btao','kahan'
         ]);
+
+        // HIGH-SAFETY UPGRADE: If the query contains ANY of these core keywords, it's NEVER gibberish
+        const coreKeywords = ['admission', 'course', 'faculty', 'fee', 'scholarship', 'eligibility', 'deadline', 'apply', 'contact'];
+        if (coreKeywords.some(kw => t.includes(kw))) return false;
 
         const gibWords = words.filter(w => {
             const clean = w.replace(/[^a-z]/g, '');
