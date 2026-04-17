@@ -306,20 +306,40 @@ async def chat_endpoint(request: ChatRequest):
                         )
                         source = "ai_total_failure_contact"
             else:
-                final_response = ai_gen_resp
                 source = "ai"
-                # Best-effort: save learned query
-                await faq_service.save_resolved_query(query, final_response)
+                # Best-effort: save learned query (ISOLATED TO PREVENT CRASH)
+                try:
+                    await faq_service.save_resolved_query(query, final_response)
+                except:
+                    pass
         except Exception as e:
             print(f"AI service failed: {e}")
-            final_response = (
-                "I'm sorry, I'm unable to process your query right now. "
-                "Please feel free to reach out to our college support directly:\n\n"
-                "📧 Email: support@npgc.in\n"
-                "📞 Phone: 0522 4021304\n\n"
-                "Our team will be happy to assist you!"
-            )
-            source = "ai_exception_contact"
+            # UNIVERSAL EMERGENCY FALLBACK: Match keywords even on hard crash
+            q_low = query.lower()
+            if any(k in q_low for k in ["admission", "apply", "form", "entrance"]):
+                final_response = (
+                    "We are currently experiencing technical difficulties fetching the latest database records, "
+                    "but generally: Admissions at NPGC are done online via the college website. "
+                    "You can visit the admission portal here: https://npgc.in/admission\n\n"
+                    "Please contact support@npgc.in for direct help."
+                )
+                source = "emergency_hardcoded_admission_exception"
+            elif any(k in q_low for k in ["course", "bca", "bba", "bcom", "bsc", "b.a", "pg"]):
+                final_response = (
+                    "I'm having trouble reaching our course database right now. "
+                    "NPGC offers various UG and PG courses including BCA, BBA, B.Com, B.Sc, and B.A. "
+                    "Please check the official Prospectus for current seat availability."
+                )
+                source = "emergency_hardcoded_courses_exception"
+            else:
+                final_response = (
+                    "I'm sorry, I'm unable to process your query right now due to a temporary service outage. "
+                    "Please feel free to reach out to our college support directly:\n\n"
+                    "📧 Email: support@npgc.in\n"
+                    "📞 Phone: 0522 4021304\n\n"
+                    "Our team will be happy to assist you!"
+                )
+                source = "ai_exception_contact"
 
     # 5. Hybrid Suggestions (Static Map + AI Fallback)
     suggestions = []
