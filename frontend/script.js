@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Gibberish Detector (Phonotactics-based) ---
     // Valid English consonant bigrams — any pair NOT in this set is illegal and signals gibberish
     const VALID_BIGRAMS = new Set([
-        'bl','br','ch','cl','cr','dr','dw','fl','fr','gh','gl','gr',
+        'bl','br','ch','cl','cr','dr','ds','dl','dm','dw','fl','fr','gh','gl','gr',
         'kh','kl','kn','kr','lk','lm','lp','ll','ln','lt','lf','ld','lv',
         'mb','mn','mp','nd','ng','nk','nt','nc','nf','ns','nw',
         'ph','pl','pr','ps','pt',
@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Allow known NPGC/Hindi keywords to pass even if short
         const knownWords = new Set([
+            'admission', 'deadline', 'apply', 'faculty', 'professor', 'contact',
             'bca','bba','bsc','mca','mba','ba','ma','hod','lab','npgc',
             'kab','kya','hai','se','ki','ka','ko','toh','kaise','kitni','btao','kahan'
         ]);
