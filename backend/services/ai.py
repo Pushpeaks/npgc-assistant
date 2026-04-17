@@ -27,9 +27,9 @@ STRICT RULES:
 """.strip()
 
 class AIService:
-    def __init__(self, model_name: str = "gemini-flash-latest"):
+    def __init__(self, model_name: str = "gemini-2.5-flash"):
         self.model_name = model_name
-        # Use v1beta for better compatibility with 1.5-flash
+        # Use v1beta for better compatibility with 2.5-flash
         self.api_url_base = "https://generativelanguage.googleapis.com/v1beta/models"
         self.api_url = f"{self.api_url_base}/{self.model_name}:generateContent"
 
@@ -151,12 +151,16 @@ class AIService:
 
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
-                    f"{self.api_url_base}/gemini-2.0-flash:generateContent?key={GEN_API_KEY}",
+                    f"{self.api_url_base}/{self.model_name}:generateContent?key={GEN_API_KEY}",
                     json=payload,
                     headers={"Content-Type": "application/json"}
                 )
 
-                if response.status_code == 429 or response.status_code != 200:
+                if response.status_code == 429:
+                    print(f"!!! QUOTA EXCEEDED (429) for {self.model_name} !!! Attempting Groq Fallback...")
+                    return await self.get_groq_response(query, context, language)
+
+                if response.status_code != 200:
                     print(f"Gemini Issue ({response.status_code}). Attempting Groq Fallback...")
                     return await self.get_groq_response(query, context, language)
 

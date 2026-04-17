@@ -68,6 +68,24 @@ async def serve_frontend():
 async def health():
     return {"message": "Welcome to the NPGC Assistant | Modular FastAPI Chatbot API", "status": "online"}
 
+@app.get("/api/debug-check")
+async def debug_check():
+    """Diagnostic route to check connections in production."""
+    db_status = "Online ✅" if db.pool else "Offline ❌"
+    
+    # Check keys (masked for safety)
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    groq_key = os.getenv("GROQ_API_KEY")
+    
+    return {
+        "database": db_status,
+        "database_host": os.getenv("MYSQL_HOST", "Not Set"),
+        "gemini_api_key": "Set ✅" if gemini_key else "Not Set ❌",
+        "groq_api_key": "Set ✅" if groq_key else "Not Set ❌",
+        "env_port": os.getenv("PORT", "Default (7860)"),
+        "tip": "If Database is Offline, ensure Aiven Whitelist includes 0.0.0.0/0"
+    }
+
 # Mount frontend static files at root - must come AFTER all API routes
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 

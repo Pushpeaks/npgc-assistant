@@ -22,6 +22,7 @@ class Database:
         try:
             ssl_context = None
             if MYSQL_HOST != "localhost":
+                print(f"Enabling SSL for remote MySQL connection to {MYSQL_HOST}...")
                 # Create a default SSL context for secure connections
                 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
                 ssl_context.check_hostname = False
@@ -38,9 +39,12 @@ class Database:
                 cursorclass=aiomysql.DictCursor,
                 ssl=ssl_context
             )
-            print(f"Connected to MySQL Database: {MYSQL_DB}")
+            print(f"✅ Successfully Connected to MySQL Database: {MYSQL_DB}")
         except Exception as e:
-            print(f"MySQL Connection Error: {e}")
+            print(f"❌ MySQL Connection Failure!")
+            print(f"   Error: {e}")
+            print(f"   Host: {MYSQL_HOST}, Port: {MYSQL_PORT}, User: {MYSQL_USER}")
+            print(f"   Tip: If on Hugging Face, ensure Aiven IP whitelist allows 0.0.0.0/0.")
             self.pool = None
 
     async def close(self):
